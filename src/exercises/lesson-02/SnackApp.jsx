@@ -20,7 +20,7 @@ export default function SnackList() {
           {snack.rank}: {snack.name}
         </p>
       ))}
-      <footer style={{ fontSize: '10px' }}>TM Snack App</footer>
+      <footer style={{ fontSize: '10px' }}>TM Snack App.</footer>
     </div>
   );
 }
