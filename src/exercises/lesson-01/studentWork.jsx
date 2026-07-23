@@ -21,7 +21,6 @@ export default function StudentWork() {
         {hobbies.map((hobby) => (
           <li key={hobby.id}> {hobby.title}</li>
         ))}
-        .
       </p>
     </div>
   );
