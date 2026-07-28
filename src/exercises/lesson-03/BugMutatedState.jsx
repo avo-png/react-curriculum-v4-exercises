@@ -9,12 +9,12 @@
 */
 
 import { useState } from 'react';
+
 export default function BugMutatedState() {
-  let [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
   function handleAdd() {
-    count++;
-    setCount(count);
+    setCount(count + 1);
   }
 
   return (
@@ -26,4 +26,4 @@ export default function BugMutatedState() {
 }
 
 // Explanation:
-// (Write your explanation here)
+// That let needed to be a const. By changing to const, the state is no longer mutated. Now we don't need to add the increment count and can instead just use setCount to add 1.
