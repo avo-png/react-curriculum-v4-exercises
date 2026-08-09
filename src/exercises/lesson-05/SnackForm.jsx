@@ -1,5 +1,5 @@
 import styles from './SnackForm.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SnackForm({
   addSnack,
@@ -11,6 +11,18 @@ export default function SnackForm({
   const [name, setName] = useState('');
   const [rating, setRating] = useState('');
   const [touched, setTouched] = useState({ name: false, rating: false });
+
+  useEffect(() => {
+    if (editingSnack) {
+      setName(editingSnack.name ?? '');
+      setRating(editingSnack.rating ?? '');
+    } else {
+      setName('');
+      setRating('');
+    }
+
+    setTouched({ name: false, rating: false });
+  }, [editingSnack]);
 
   const isEditing = Boolean(editingSnack);
 
@@ -42,7 +54,7 @@ export default function SnackForm({
         <input
           type="text"
           name="name"
-          defaultValue={isEditing ? editingSnack.name : ''}
+          value={isEditing ? editingSnack.name : ''}
           required
           className={styles['field-input']}
           placeholder="Enter snack name"
@@ -54,7 +66,7 @@ export default function SnackForm({
         <input
           type="number"
           name="rating"
-          defaultValue={isEditing ? editingSnack.rating : ''}
+          value={isEditing ? editingSnack.rating : ''}
           required
           min="1"
           max="5"
