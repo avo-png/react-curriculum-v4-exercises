@@ -54,9 +54,11 @@ export default function SnackForm({
         <input
           type="text"
           name="name"
-          value={isEditing ? editingSnack.name : ''}
+          value={name}
           required
           className={styles['field-input']}
+          onChange={(e) => setName(e.target.value)}
+          onFocus={setTouched((prev) => ({ ...prev, name: true }))}
           placeholder="Enter snack name"
         />
       </div>
@@ -66,11 +68,13 @@ export default function SnackForm({
         <input
           type="number"
           name="rating"
-          value={isEditing ? editingSnack.rating : ''}
+          value={rating}
           required
           min="1"
           max="5"
           className={styles['field-input']}
+          onChange={(e) => setRating(e.target.value)}
+          onFocus={setTouched((prev) => ({ ...prev, rating: true }))}
           placeholder="Rate 1-5"
         />
       </div>
