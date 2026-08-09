@@ -13,20 +13,24 @@ export default function SnackManager() {
   const [editingSnack, setEditingSnack] = useState(null);
 
   function addSnack(name, rating) {
-    const newSnack = {
-      id: nextId,
-      name: name.trim(),
-      rating: parseInt(rating, 10),
-    };
-    setSnacks([...snacks, newSnack]);
-    setNextId(nextId + 1);
+    const trimmedName = name.trim();
+    const parsedRating = parseInt(rating, 10);
+
+    setSnacks((prev) => [
+      ...prev,
+      { id: nextId, name: trimmedName, rating: parsedRating },
+    ]);
+    setNextId((prev) => prev + 1);
   }
 
   function updateSnack(id, name, rating) {
-    setSnacks(
-      snacks.map((snack) =>
+    const trimmedName = name.trim();
+    const parsedRating = parseInt(rating, 10);
+
+    setSnacks((prev) =>
+      prev.map((snack) =>
         snack.id === id
-          ? { ...snack, name: name.trim(), rating: parseInt(rating, 10) }
+          ? { ...snack, name: trimmedName, rating: parsedRating }
           : snack
       )
     );
@@ -34,10 +38,8 @@ export default function SnackManager() {
   }
 
   function deleteSnack(id) {
-    setSnacks(snacks.filter((snack) => snack.id !== id));
-    if (editingSnack && editingSnack.id === id) {
-      setEditingSnack(null);
-    }
+    setSnacks((prev) => prev.filter((snack) => snack.id !== id));
+    setEditingSnack((prev) => (prev && prev.id === id ? null : prev));
   }
 
   function startEdit(snack) {
@@ -64,6 +66,7 @@ export default function SnackManager() {
         <h3 className={styles['snacks-title']}>
           Current Snacks ({snacks.length})
         </h3>
+
         {snacks.length === 0 ? (
           <p className={styles['empty-message']}>
             No snacks yet. Add one above!
@@ -73,7 +76,11 @@ export default function SnackManager() {
             {snacks.map((snack) => (
               <div
                 key={snack.id}
-                className={`${styles['snack-item']} ${editingSnack && editingSnack.id === snack.id ? styles['snack-item-editing'] : ''}`}
+                className={`${styles['snack-item']} ${
+                  editingSnack && editingSnack.id === snack.id
+                    ? styles['snack-item-editing']
+                    : ''
+                }`}
               >
                 <div className={styles['snack-info']}>
                   <div className={styles['snack-name']}>{snack.name}</div>
@@ -81,6 +88,7 @@ export default function SnackManager() {
                     Rating: {'⭐'.repeat(snack.rating)} ({snack.rating}/5)
                   </div>
                 </div>
+
                 <div className={styles['snack-actions']}>
                   <button
                     onClick={() => startEdit(snack)}

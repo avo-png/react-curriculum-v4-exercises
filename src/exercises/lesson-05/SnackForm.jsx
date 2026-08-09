@@ -14,8 +14,8 @@ export default function SnackForm({
 
   useEffect(() => {
     if (editingSnack) {
-      setName(editingSnack.name ?? '');
-      setRating(editingSnack.rating ?? '');
+      setName(String(editingSnack.name ?? ''));
+      setRating(String(editingSnack.rating ?? ''));
     } else {
       setName('');
       setRating('');
@@ -28,30 +28,37 @@ export default function SnackForm({
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const name = formData.get('name');
-    const rating = formData.get('rating');
+
+    if (!validateName() || !validateRating()) {
+      setTouched({ name: true, rating: true });
+      return;
+    }
 
     if (isEditing) {
       updateSnack(editingSnack.id, name, rating);
     } else {
       addSnack(name, rating);
-      e.target.reset();
+      setName('');
+      setRating('');
     }
   }
 
   function validateName() {
     return name.trim() !== '';
   }
+
   function validateRating() {
+    // rating is always stored as a string now, so trim is safe
     return rating.trim() !== '';
   }
+
   function getNameError() {
     if (!validateName() && touched.name) {
       return 'Snack name is required';
     }
     return '';
   }
+
   function getRatingError() {
     if (!validateRating() && touched.rating) {
       return 'Please select a rating';
@@ -76,7 +83,7 @@ export default function SnackForm({
           value={name}
           className={styles['field-input']}
           onChange={(e) => setName(e.target.value)}
-          onFocus={setTouched((prev) => ({ ...prev, name: true }))}
+          onFocus={() => setTouched((prev) => ({ ...prev, name: true }))}
           placeholder="Enter snack name"
         />
         {getNameError() && <div className={styles.error}>{getNameError()}</div>}
@@ -92,7 +99,7 @@ export default function SnackForm({
           max="5"
           className={styles['field-input']}
           onChange={(e) => setRating(e.target.value)}
-          onFocus={setTouched((prev) => ({ ...prev, rating: true }))}
+          onFocus={() => setTouched((prev) => ({ ...prev, rating: true }))}
           placeholder="Rate 1-5"
         />
         {getRatingError() && (
