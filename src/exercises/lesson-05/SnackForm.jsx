@@ -43,20 +43,15 @@ export default function SnackForm({
   function validateName() {
     return name.trim() !== '';
   }
-  //   [ ] Create `validateRating()` function that returns `true` if rating is selected (not empty)
   function validateRating() {
     return rating.trim() !== '';
   }
-  // - [ ] Create `getNameError()` function that returns error message if name is invalid AND touched
-  //   - Example: `"Snack name is required"`
   function getNameError() {
     if (!validateName() && touched.name) {
       return 'Snack name is required';
     }
     return '';
   }
-  // - [ ] Create `getRatingError()` function that returns error message if rating is invalid AND touched
-  //   - Example: `"Please select a rating"`
   function getRatingError() {
     if (!validateRating() && touched.rating) {
       return 'Please select a rating';
@@ -84,6 +79,7 @@ export default function SnackForm({
           onFocus={setTouched((prev) => ({ ...prev, name: true }))}
           placeholder="Enter snack name"
         />
+        {getNameError() && <div className={styles.error}>{getNameError()}</div>}
       </div>
 
       <div className={styles['field-container']}>
@@ -99,6 +95,9 @@ export default function SnackForm({
           onFocus={setTouched((prev) => ({ ...prev, rating: true }))}
           placeholder="Rate 1-5"
         />
+        {getRatingError() && (
+          <div className={styles.error}>{getRatingError()}</div>
+        )}
       </div>
 
       <div className={styles['button-container']}>
