@@ -136,6 +136,47 @@ export function surveyReducer(state, action) {
         ),
       };
 
+    case 'UPDATE_OPTION_TEXT':
+      return {
+        ...state,
+        questions: state.questions.map((question) =>
+          question.id === action.payload.questionId
+            ? {
+                ...question,
+                options: question.options.map((option, index) =>
+                  index === action.payload.optionIndex
+                    ? action.payload.newText
+                    : option
+                ),
+              }
+            : question
+        ),
+      };
+
+    case 'DELETE_OPTION_FROM_QUESTION':
+      return {
+        ...state,
+        questions: state.questions.map((question) => {
+          if (
+            question.id !== action.payload.questionId ||
+            question.type !== QUESTION_TYPES.MULTIPLE_CHOICE
+          ) {
+            return question;
+          }
+
+          if (question.options.length <= 2) {
+            return question;
+          }
+
+          return {
+            ...question,
+            options: question.options.filter(
+              (_, index) => index !== action.payload.optionIndex
+            ),
+          };
+        }),
+      };
+
     default:
       return state;
   }
