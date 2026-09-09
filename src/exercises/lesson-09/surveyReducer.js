@@ -95,14 +95,46 @@ export function surveyReducer(state, action) {
     // ===== STUDENT IMPLEMENTATION TASKS =====
 
     case 'UPDATE_QUESTION_TEXT':
-      // TODO: Implement this action
-      console.log('TODO: Implement UPDATE_QUESTION_TEXT action');
-      return state;
+      return {
+        ...state,
+        questions: state.questions.map((question) =>
+          question.id === action.payload.id
+            ? {
+                ...question,
+                question: action.payload.newText,
+              }
+            : question
+        ),
+      };
 
     case 'DELETE_QUESTION':
-      // TODO: Implement this action
-      console.log('TODO: Implement DELETE_QUESTION action');
-      return state;
+      return {
+        ...state,
+        questions: state.questions.filter(
+          (question) => question.id !== action.payload.id
+        ),
+        ui: {
+          ...state.ui,
+          editingQuestionId:
+            state.ui.editingQuestionId === action.payload.id
+              ? null
+              : state.ui.editingQuestionId,
+        },
+      };
+
+    case 'ADD_OPTION_TO_QUESTION':
+      return {
+        ...state,
+        questions: state.questions.map((question) =>
+          question.id === action.payload.questionId &&
+          question.type === QUESTION_TYPES.MULTIPLE_CHOICE
+            ? {
+                ...question,
+                options: [...question.options, action.payload.optionText],
+              }
+            : question
+        ),
+      };
 
     default:
       return state;
