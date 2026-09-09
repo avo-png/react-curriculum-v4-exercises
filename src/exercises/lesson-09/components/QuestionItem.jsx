@@ -49,8 +49,18 @@ export function QuestionItem({ question }) {
 
   // TODO: Students will add delete functionality here
   const handleDelete = () => {
-    console.log('TODO: Implement delete functionality');
-    // Hint: Show confirmation dialog, then use DELETE_QUESTION action
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this question?'
+    );
+
+    if (confirmed) {
+      dispatch({
+        type: 'DELETE_QUESTION',
+        payload: {
+          id: question.id,
+        },
+      });
+    }
   };
 
   const handleOptionSave = (index, newText) => {
@@ -100,7 +110,7 @@ export function QuestionItem({ question }) {
             {state.ui.editingQuestionId === question.id ? 'Cancel' : 'Edit'}
           </button>
           <button className={styles['delete-btn']} onClick={handleDelete}>
-            Delete (TODO)
+            Delete
           </button>
         </div>
       </div>
